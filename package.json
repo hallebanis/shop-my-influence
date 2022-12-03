@@ -1,0 +1,25 @@
+{
+  "name": "shop-my-influence",
+  "version": "1.0.0",
+  "description": "this is a technical test for shop my influence",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hallebanis/shop-my-influence.git"
+  },
+  "keywords": [],
+  "author": "ANIS HALLEB",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hallebanis/shop-my-influence/issues"
+  },
+  "homepage": "https://github.com/hallebanis/shop-my-influence#readme",
+  "devDependencies": {
+    "eslint": "^8.29.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "2.8.0"
+  }
+}
