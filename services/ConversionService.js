@@ -11,11 +11,10 @@ class ConversionService {
     async getAll(startDate, endDate) {
         return new Promise(async (resolve, reject) => {
             try {
-                const response =
-                    await this.conversionDataSource.productSellCount(
-                        startDate,
-                        endDate
-                    );
+                const response = await this.conversionDataSource.getBestSellsInfluencer(
+                    startDate,
+                    endDate
+                );
                 resolve(response);
             } catch (error) {
                 console.error(error);
