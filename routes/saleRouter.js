@@ -1,19 +1,22 @@
 const router = require('express').Router();
 /**
  *
- * @param {import('../controllers/coversionController')} conversionController
+ * @param {import('../controllers/HomePageController')} homePageController
  * @returns {import('express').Router}
  */
-function conversionRouter(conversionController) {
+function saleRouter(homePageController) {
     // return async function (req, res) {
     //     const t = await conversionController.getAll();
     //     res.send(t);
     // };
-    router.get('/', async (req, res) => {
+    router.get('/performances', async (req, res) => {
         try {
             const startDate = req.query?.start || 0;
             const endDate = req.query?.end || Date.now();
-            let result = await conversionController.getAll(startDate, endDate);
+            let result = await homePageController.getGlobalPerformance(
+                startDate,
+                endDate
+            );
             res.send(result);
         } catch (error) {
             res.status(error.code).send(error);
@@ -22,4 +25,4 @@ function conversionRouter(conversionController) {
     return router;
 }
 
-module.exports = conversionRouter;
+module.exports = saleRouter;

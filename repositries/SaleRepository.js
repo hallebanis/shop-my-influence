@@ -31,12 +31,13 @@ class SaleRepository {
      *returns the total sales for each currency
      * @param {Number} startDate unix timestamp
      * @param {Number} endDate unix timestamp
-     * @returns {Array<{CA:Number,currency:String}>}
+     * @returns {Array<{ca:Number,currency:String}>}
      */
     async getTotalSales(startDate, endDate) {
         try {
             const query = `SELECT SUM(amount) AS CA,currency FROM conversions where createdat BETWEEN ${startDate} AND ${endDate} GROUP BY currency`;
             const result = await this.dbClient.query(query);
+            console.log(result.rows);
             return result.rows;
         } catch (error) {
             console.error('getTotalSales', error);
@@ -65,7 +66,7 @@ class SaleRepository {
      * @param {Number} endDate
      * @returns {{average_cart:Number}}
      */
-    async averageChart(startDate, endDate) {
+    async averageCart(startDate, endDate) {
         try {
             const query = `SELECT AVG(amount) AS average_cart FROM conversions where createdat BETWEEN ${startDate} AND ${endDate}`;
             const result = await this.dbClient.query(query);

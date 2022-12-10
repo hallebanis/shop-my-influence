@@ -14,11 +14,9 @@ const saleRepository = new (require('./repositries/SaleRepository'))({
 const saleService = new (require('./services/SaleService'))({
     saleRepository,
 });
-const ConversionController = new (require('./controllers/coversionController'))(
-    {
-        saleService,
-    }
-);
+const homePageController = new (require('./controllers/HomePageController'))({
+    saleService,
+});
 
 require('dotenv').config();
 
@@ -83,7 +81,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
  *
  *
  */
-app.use('/sale', require('./routes/conversionsRoutes')(ConversionController));
+app.use('/sale', require('./routes/saleRouter')(homePageController));
 app.get('/healthcheck', async (req, res) => {
     res.json({ status: 200, server: 'running' });
 });
