@@ -8,14 +8,16 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const { connect, getDbClient } = require('./helpers/dbConnection');
 connect();
 const client = getDbClient();
-const conversionDataSource = new (require('./data/ConversionDataSource'))({
+const saleRepository = new (require('./repositries/SaleRepository'))({
     dbClient: client,
 });
-const conversionService = new (require('./services/ConversionService'))({
-    conversionDataSource,
+const saleService = new (require('./services/SaleService'))({
+    saleRepository,
 });
 const ConversionController = new (require('./controllers/coversionController'))(
-    { conversionService }
+    {
+        saleService,
+    }
 );
 
 require('dotenv').config();
@@ -23,7 +25,9 @@ require('dotenv').config();
 const app = express();
 const PORT = 4001;
 
-const Constants = new (require('./Constants'))(process.env.APP_PORT || PORT);
+const Constants = new (require('./helpers/Constants'))(
+    process.env.APP_PORT || PORT
+);
 const specs = swaggerJsDoc(Constants.swaggerOptions);
 
 app.use(cors());

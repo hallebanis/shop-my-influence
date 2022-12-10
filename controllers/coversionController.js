@@ -2,18 +2,15 @@ class ConversionController {
     /**
      *
      * @param {{
-     * conversionService:import('../services/ConversionService')
+     * saleService:import('../services/SaleService')
      * }} input
      */
     constructor(input) {
-        this.conversionService = input?.conversionService;
+        this.saleService = input?.saleService;
     }
     async getAll(startDate, endDate) {
         try {
-            const response = await this.conversionService.getAll(
-                startDate,
-                endDate
-            );
+            const response = await this.saleService.getAll(startDate, endDate);
             return response;
         } catch (error) {
             console.error(error);
