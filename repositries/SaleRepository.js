@@ -1,4 +1,4 @@
-const { addOrderBy } = require('../helpers/queruBuilder');
+const { addOrderBy } = require('../helpers/helpers');
 
 class SaleRepository {
     /**
@@ -148,9 +148,9 @@ class SaleRepository {
      * @param {Number} offset
      * @param {false | "ASC" | "DESC"} order
      * @param {Array<String>} orderColumns
-     * @returns {{color_total_sales:Number,devisetype:String}}
+     * @returns {{color_total_sales:Number,fr_name:String}}
      */
-    async getBestSalesColor(
+    async getColorsTotalSales(
         startDate,
         endDate,
         count = 5,
@@ -159,10 +159,10 @@ class SaleRepository {
         orderColumns = []
     ) {
         try {
-            let query = `SELECT SUM(amount) AS color_total_sales,fr_name maincolor FROM conversions  
+            let query = `SELECT SUM(amount) AS color_total_sales,fr_name, en_name FROM conversions  
             RIGHT JOIN colors on colors.key=conversions.maincolor 
             WHERE maincolor <> 'NULL' AND createdat BETWEEN ${startDate} AND ${endDate} 
-            GROUP BY maincolor,colors.fr_name `;
+            GROUP BY en_name,colors.fr_name `;
             if (order && orderColumns.length > 0) {
                 query += addOrderBy(orderColumns, order);
             }
@@ -170,7 +170,7 @@ class SaleRepository {
             const result = await this.dbClient.query(query);
             return result.rows;
         } catch (error) {
-            console.error('getTotalSales', error);
+            console.error('getColorsTotalSales', error);
             throw error;
         }
     }
@@ -184,7 +184,7 @@ class SaleRepository {
      * @param {Array<String>} orderColumns
      * @returns {Array<{best_sale_category:Number,fr_name:String,en_name:String}>}
      */
-    async getBestSalesCategory(
+    async getSalesPerCategory(
         startDate,
         endDate,
         count = 5,
@@ -202,7 +202,7 @@ class SaleRepository {
             const result = await this.dbClient.query(query);
             return result.rows;
         } catch (error) {
-            console.error('getTotalSales', error);
+            console.error('getSalesPerCategory', error);
             throw error;
         }
     }
@@ -222,10 +222,11 @@ class SaleRepository {
     ) {
         try {
             let query = ` select SUM(amount) as total_sale,extract(dow from TO_TIMESTAMP(createdat)) as day from conversions 
-            WHERE createdat BETWEEN ${startDate} AND ${endDate} group by day`;
+            WHERE createdat BETWEEN ${startDate} AND ${endDate} GROUP BY day `;
             if (order && orderColumns.length > 0) {
                 query += addOrderBy(orderColumns, order);
             }
+            console.log(query);
             const result = await this.dbClient.query(query);
             return result.rows;
         } catch (error) {
@@ -266,7 +267,7 @@ class SaleRepository {
      * @param {Array<String>} orderColumns
      * @returns {Array<{total:Number,countrycode:String}>}
      */
-    async getBestSalesCountry(
+    async GetCountriesTotalSales(
         startDate,
         endDate,
         count = 5,
@@ -283,7 +284,7 @@ class SaleRepository {
             const result = await this.dbClient.query(query);
             return result.rows;
         } catch (error) {
-            console.error('getTotalSales', error);
+            console.error('GetCountriesTotalSales', error);
             throw error;
         }
     }
@@ -297,7 +298,7 @@ class SaleRepository {
      * @param {Array<String>} orderColumns
      * @returns {Array<{total:Number,name:String,img:String}>}
      */
-    async getBestSalesInfluencer(
+    async getInfluencersTotalSales(
         startDate,
         endDate,
         count = 5,
@@ -314,7 +315,7 @@ class SaleRepository {
             const result = await this.dbClient.query(query);
             return result.rows;
         } catch (error) {
-            console.error('getTotalSales', error);
+            console.error('getInfluencersTotalSales', error);
             throw error;
         }
     }

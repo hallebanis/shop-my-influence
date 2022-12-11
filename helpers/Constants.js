@@ -1,10 +1,5 @@
 class Constants {
-    /**
-     *
-     * @param {Number} port
-     */
-    constructor(port) {
-        this.port = port;
+    constructor() {
         this.swaggerOptions = Object.freeze({
             definition: {
                 openapi: '3.0.0',
@@ -28,6 +23,21 @@ class Constants {
                 ],
             },
             apis: ['./routes/*.js', 'index.js'],
+        });
+        this.days = Object.freeze({
+            sunday: 0,
+            monday: 1,
+            tuesday: 2,
+            wednesday: 3,
+            thursday: 4,
+            friday: 5,
+            saturday: 6,
+        });
+        this.dayPeriod = Object.freeze({
+            morning: { start: 6, end: 12 },
+            afterNoon: { start: 12, end: 17 },
+            evening: { start: 17, end: 20 },
+            night: { start: 20, end: 6 },
         });
     }
 }

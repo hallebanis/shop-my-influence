@@ -22,6 +22,19 @@ function saleRouter(homePageController) {
             res.status(error.code).send(error);
         }
     });
+    router.get('/insights', async (req, res) => {
+        try {
+            const startDate = req.query?.start || 0;
+            const endDate = req.query?.end || Date.now();
+            let result = await homePageController.getInsightsData(
+                startDate,
+                endDate
+            );
+            res.send(result);
+        } catch (error) {
+            res.status(error.code).send(error);
+        }
+    });
     return router;
 }
 

@@ -1,4 +1,6 @@
 const CC = require('currency-converter-lt');
+const { getCountryDetails, getKeyByValue } = require('../helpers/helpers');
+const constants = new (require('../helpers/Constants'))();
 
 class SaleService {
     /**
@@ -16,7 +18,7 @@ class SaleService {
      * @param {Number} endDate
      * @returns {Promise<{totalSales:Number}>}
      */
-    async getTotalSales(startDate, endDate) {
+    getTotalSales(startDate, endDate) {
         return new Promise(async (resolve, reject) => {
             try {
                 const totalSalesResult =
@@ -50,7 +52,7 @@ class SaleService {
      * @param {Number} endDate
      * @returns {Promise<{sales_count:Number}>}
      */
-    async getSalesCount(startDate, endDate) {
+    getSalesCount(startDate, endDate) {
         return new Promise(async (resolve, reject) => {
             try {
                 const response = await this.saleRepository.getSalesCount(
@@ -70,7 +72,7 @@ class SaleService {
      * @param {Number} endDate
      * @returns {Promise<{average_cart:Number}>}
      */
-    async averageCart(startDate, endDate) {
+    averageCart(startDate, endDate) {
         return new Promise(async (resolve, reject) => {
             try {
                 const result = await this.saleRepository.result(
@@ -90,7 +92,7 @@ class SaleService {
      * @param {Number} endDate
      * @returns {Promise<{sibled_country_count:Number}>}
      */
-    async sibledCountryCount(startDate, endDate) {
+    sibledCountryCount(startDate, endDate) {
         return new Promise(async (resolve, reject) => {
             try {
                 const result = await this.saleRepository.sibledCountryCount(
@@ -110,7 +112,7 @@ class SaleService {
      * @param {Number} endDate
      * @returns {Promise<{product_sales_count:Number}>}
      */
-    async productSalesCount(startDate, endDate) {
+    productSalesCount(startDate, endDate) {
         return new Promise(async (resolve, reject) => {
             try {
                 const result = await this.saleRepository.productSalesCount(
@@ -128,33 +130,224 @@ class SaleService {
      *
      * @param {Number} startDate
      * @param {Number} endDate
-     * @param {Number} count
-     * @param {Number} offset
-     * @param {false | "ASC" | "DESC"} order
-     * @param {Array<String>} orderColumns
-     * @returns
+     * @returns {Promise<{total_sales:Number,devisetype:String}>}
      */
-    async getBestSalesDevice(
-        startDate,
-        endDate,
-        count,
-        offset,
-        order,
-        orderColumns
-    ) {
+    getBestSalesDevice(startDate, endDate) {
         return new Promise(async (resolve, reject) => {
             try {
                 const result = await this.saleRepository.getBestSalesDevice(
                     startDate,
                     endDate,
-                    count,
-                    offset,
-                    order,
-                    orderColumns
+                    1,
+                    0,
+                    'DESC',
+                    ['total_sales']
                 );
-                resolve(result);
+                resolve(result[0] || result);
             } catch (error) {
-                console.error('SaleService.getTotalSales', error);
+                console.error('SaleService.getBestSalesDevice', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @returns {Promise<{color_total_sales:Number,fr_name:String,en_name:String}>}
+     */
+    getBestSalesColor(startDate, endDate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleRepository.getColorsTotalSales(
+                    startDate,
+                    endDate,
+                    1,
+                    0,
+                    'DESC',
+                    ['color_total_sales']
+                );
+                resolve(result[0] || result);
+            } catch (error) {
+                console.error('SaleService.getBestSalesColor', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @returns {Promise<{best_sale_category:Number,fr_name:String,en_name:String}>}
+     */
+    getBestSalesCategory(startDate, endDate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleRepository.getSalesPerCategory(
+                    startDate,
+                    endDate,
+                    1,
+                    0,
+                    'DESC',
+                    ['best_sale_category']
+                );
+                resolve(result[0] || result);
+            } catch (error) {
+                console.error('SaleService.getBestSalesCategory', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @returns {Promise<{total_sale:Number,day:String}>}
+     */
+    getBestSellsDay(startDate, endDate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleRepository.getSaleesPerDay(
+                    startDate,
+                    endDate,
+                    'DESC',
+                    ['total_sale']
+                );
+                console.log('debug ', result);
+                result[0].day = getKeyByValue(constants.days, result[0].day);
+                resolve(result[0]);
+            } catch (error) {
+                console.error('SaleService.getBestSellsDay', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @param {Number} count
+     * @param {Number} offset
+     * @param {false | "ASC" | "DESC"} order
+     * @param {Array<String>} orderColumns
+     * @returns {Promise<{total:Number, countrycode:String,name:String,flag:String}>}
+     */
+    getBestSalesCountry(startDate, endDate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleRepository.GetCountriesTotalSales(
+                    startDate,
+                    endDate,
+                    1,
+                    0,
+                    'DESC',
+                    ['total']
+                );
+                const details = getCountryDetails(result[0].countrycode);
+
+                resolve({ ...result[0], ...details });
+            } catch (error) {
+                console.error('SaleService.getBestSalesColor', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @returns {Promise<{total:Number,name:String,img:String}>}
+     */
+    getBestSalesInfluencer(startDate, endDate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result =
+                    await this.saleRepository.getInfluencersTotalSales(
+                        startDate,
+                        endDate,
+                        1,
+                        0,
+                        'DESC',
+                        ['total']
+                    );
+                resolve(result[0]);
+            } catch (error) {
+                console.error('SaleService.getBestSalesColor', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @returns {Promise{total:Number,os:String}}
+     */
+    getBestOsSales(startDate, endDate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleRepository.getOsTotalSales(
+                    startDate,
+                    endDate,
+                    1,
+                    0,
+                    'DESC',
+                    ['total']
+                );
+                resolve(result[0]);
+            } catch (error) {
+                console.error('SaleService.getBestOsSales', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @returns {Promise<{total:Number,period:String}>}
+     */
+    getBestSalesDayPeriod(startDate, endDate) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleRepository.getSalesHours(
+                    startDate,
+                    endDate,
+                    1,
+                    0,
+                    'DESC',
+                    ['total']
+                );
+                const periods = constants.dayPeriod;
+                const response = {
+                    morning: 0,
+                    afterNoon: 0,
+                    evening: 0,
+                    night: 0,
+                };
+                result.forEach((elm) => {
+                    let assigned = false;
+                    for (let key in periods) {
+                        if (
+                            elm.hour >= periods[key].start &&
+                            elm.hour < periods[key].end
+                        ) {
+                            response[key] =
+                                response[key] + parseFloat(elm.total_sales);
+                            assigned = true;
+                        }
+                    }
+                    console.log(response);
+                    if (!assigned) {
+                        response['night'] =
+                            response['night'] + parseFloat(elm.total_sales);
+                    }
+                });
+                const max_totals = Math.max(...Object.values(response));
+                const max_period = getKeyByValue(response, max_totals);
+                resolve({ period: max_period, total: max_totals });
+            } catch (error) {
+                console.error('SaleService.getBestOsSales', error);
                 reject(error);
             }
         });
