@@ -1,5 +1,22 @@
 const router = require('express').Router();
 /**
+ * @swagger
+ * info:
+ *  title: shop my influence apis
+ *  description: technical test
+ *  version: 1.0.0
+ * host: https://shop-my-influence.onrender.com/
+ * basePath: /sale
+ * paths:
+ *  /performances/
+ *   get:
+ *   responses:
+ *    200:
+ *      decription:ok
+ *
+ */
+
+/**
  *
  * @param {import('../controllers/HomePageController')} homePageController
  * @returns {import('express').Router}
