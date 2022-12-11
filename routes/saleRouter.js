@@ -8,8 +8,10 @@ const router = require('express').Router();
  * host: https://shop-my-influence.onrender.com/
  * basePath: /sale
  * paths:
- *  /performances/
+ *  /performances:
  *   get:
+ *     produces:
+        - application/json
  *   responses:
  *    200:
  *      decription:ok
