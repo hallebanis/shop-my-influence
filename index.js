@@ -1,24 +1,26 @@
 const express = require('express');
 const cors = require('cors');
 const winston = require('winston');
-// const { Client } = require('pg');
+require('dotenv').config();
 const expressWinston = require('express-winston');
 const swaggerUI = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const { connect, getDbClient } = require('./helpers/dbConnection');
 connect();
+
 const client = getDbClient();
+//repositries
 const saleRepository = new (require('./repositries/SaleRepository'))({
     dbClient: client,
 });
+//services
 const saleService = new (require('./services/SaleService'))({
     saleRepository,
 });
+//controllers
 const homePageController = new (require('./controllers/HomePageController'))({
     saleService,
 });
-
-require('dotenv').config();
 
 const app = express();
 const PORT = 4001;
@@ -30,25 +32,6 @@ const specs = swaggerJsDoc(Constants.swaggerOptions);
 
 app.use(cors());
 app.use(express.json());
-// const client = new Client({
-//     host: process.env.PG_HOST,
-//     port: process.env.PG_PORT,
-//     user: process.env.PG_USER,
-//     database: process.env.PG_DATABASE,
-//     password: process.env.PG_PASSWORD,
-// });
-
-// client
-//     .connect()
-//     .then(() => console.log('database connected'))
-//     .catch((err) => console.error('database connection', err));
-
-// conversionDataSource
-//     .getTotalSales()
-//     .then((res) => console.log('conversionDataSource', res));
-// conversionService.getAll();
-// ConversionController.getAll();
-
 //winston configs
 app.use(
     expressWinston.logger({
@@ -60,12 +43,12 @@ app.use(
         meta: false,
         msg: 'HTTP',
         expressFormat: true,
-        colorize: false,
+        colorize: true,
     })
 );
 //swagger config
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
-// app.use('/conversion', require('./routes/conversionsRoutes'));
+
 /**
  * @swagger
  * /healthcheck:
@@ -81,10 +64,11 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
  *
  *
  */
-app.use('/sale', require('./routes/saleRouter')(homePageController));
 app.get('/healthcheck', async (req, res) => {
     res.json({ status: 200, server: 'running' });
 });
+
+app.use('/sale', require('./routes/saleRouter')(homePageController));
 
 app.listen(process.env.APP_PORT || PORT, (err) => {
     if (err) {

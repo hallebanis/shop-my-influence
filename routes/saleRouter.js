@@ -35,6 +35,60 @@ function saleRouter(homePageController) {
             res.status(error.code).send(error);
         }
     });
+    router.get('/categorySales', async (req, res) => {
+        try {
+            const startDate = req.query?.start || 0;
+            const endDate = req.query?.end || Date.now();
+            const count = req.query?.count || 5;
+            const offset = req.query?.offset || 0;
+            const sort = req.query?.sort || 'DESC';
+            let result = await homePageController.getTotalSellesPerCategory(
+                startDate,
+                endDate,
+                count,
+                offset,
+                sort
+            );
+            res.send(result);
+        } catch (error) {
+            res.status(error.code).send(error);
+        }
+    });
+    router.get('/periodSales', async (req, res) => {
+        try {
+            const startDate = req.query?.start || 0;
+            const endDate = req.query?.end || Date.now();
+            const sort = req.query?.sort || false;
+            let result = await homePageController.getTotalSellesPerdayPeriod(
+                startDate,
+                endDate,
+                sort
+            );
+            res.send(result);
+        } catch (error) {
+            res.status(error.code).send(error);
+        }
+    });
+    router.get('/deviceSales', async (req, res) => {
+        try {
+            const startDate = req.query?.start || 0;
+            const endDate = req.query?.end || Date.now();
+            const sort = req.query?.sort || false;
+            const count = req.query?.sort || 5;
+            const offset = req.query?.sort || 0;
+            let result = await homePageController.getTotalSalesPerDevice(
+                startDate,
+                endDate,
+                count,
+                offset,
+                sort
+            );
+            res.send(result);
+        } catch (error) {
+            res.status(error.code).send(error);
+        }
+    });
+
     return router;
 }
 

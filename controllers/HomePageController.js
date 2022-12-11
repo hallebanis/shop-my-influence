@@ -1,4 +1,5 @@
 const { error } = require('winston');
+const { HttpCodes, getHttpCode } = require('../utils/HttpCode');
 
 class HomePageController {
     /**
@@ -263,6 +264,87 @@ class HomePageController {
                         resolve(response);
                     }
                 });
+        });
+    }
+
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @param {Number} count
+     * @param {Number} offset
+     * @param {false | "DESC" | "ASC"} sort
+     * @returns {Promise{total:Number,fr_name:String,en_name:String}}
+     */
+    async getTotalSellesPerCategory(startDate, endDate, count, offset, sort) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleService.getTotalSellesPerCategory(
+                    startDate,
+                    endDate,
+                    count,
+                    offset,
+                    sort
+                );
+                resolve(result);
+            } catch (error) {
+                console.error(
+                    'homecontroller.getTotalSellesPerCategory',
+                    error
+                );
+                reject(getHttpCode(error));
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @param {false | "ASC" | "DESC"} sort
+     * @returns {Promise{total:Number,fr_name:String,en_name:String}}
+     */
+    async getTotalSellesPerdayPeriod(startDate, endDate, sort) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleService.getSalesDayPeriod(
+                    startDate,
+                    endDate,
+                    sort
+                );
+                resolve(result);
+            } catch (error) {
+                console.error(
+                    'homecontroller.getTotalSellesPerCategory',
+                    error
+                );
+                reject(getHttpCode(error));
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @param {Number} count
+     * @param {Number} offset
+     * @param {false | "DESC" | "ASC"} sort
+     * @returns {Promise{total:Number,fr_name:String,en_name:String}}
+     */
+    async getTotalSalesPerDevice(startDate, endDate, count, offset, sort) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleService.getTotalSalesPerDevice(
+                    startDate,
+                    endDate,
+                    count,
+                    offset,
+                    sort
+                );
+                resolve(result);
+            } catch (error) {
+                console.error('homecontroller.getTotalSalesPerDevice', error);
+                reject(getHttpCode(error));
+            }
         });
     }
 }

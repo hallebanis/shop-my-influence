@@ -213,7 +213,6 @@ class SaleService {
                     'DESC',
                     ['total_sale']
                 );
-                console.log('debug ', result);
                 result[0].day = getKeyByValue(constants.days, result[0].day);
                 resolve(result[0]);
             } catch (error) {
@@ -313,9 +312,85 @@ class SaleService {
                 const result = await this.saleRepository.getSalesHours(
                     startDate,
                     endDate,
-                    1,
-                    0,
                     'DESC',
+                    ['total_sales']
+                );
+                const periods = constants.dayPeriod;
+                const response = {
+                    morning: 0,
+                    afterNoon: 0,
+                    evening: 0,
+                    night: 0,
+                };
+                result.forEach((elm) => {
+                    let assigned = false;
+                    for (let key in periods) {
+                        if (
+                            elm.hour >= periods[key].start &&
+                            elm.hour < periods[key].end
+                        ) {
+                            response[key] =
+                                response[key] + parseFloat(elm.total_sales);
+                            assigned = true;
+                        }
+                    }
+                    if (!assigned) {
+                        response['night'] =
+                            response['night'] + parseFloat(elm.total_sales);
+                    }
+                });
+                const max_totals = Math.max(...Object.values(response));
+                const max_period = getKeyByValue(response, max_totals);
+                resolve({ period: max_period, total: max_totals });
+            } catch (error) {
+                console.error('SaleService.getBestOsSales', error);
+                reject(error);
+            }
+        });
+    }
+    //third section
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @param {Number} count
+     * @param {Number} offset
+     * @param {false | "DESC" | "ASC"} sort
+     * @returns {Promise<Array<{total:Number,fr_name:String,en_name:String}>>}
+     */
+    getTotalSellesPerCategory(startDate, endDate, count, offset, sort) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result =
+                    await this.saleRepository.getCategoriesTotalSales(
+                        startDate,
+                        endDate,
+                        count,
+                        offset,
+                        sort,
+                        ['total']
+                    );
+                resolve(result);
+            } catch (error) {
+                console.error('SaleService.getBestOsSales', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @param {false | "ASC" | "DESC"} sort
+     * @returns {Promise<{total:Number,period:String}>}
+     */
+    getSalesDayPeriod(startDate, endDate, sort) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleRepository.getSalesHours(
+                    startDate,
+                    endDate,
+                    sort,
                     ['total']
                 );
                 const periods = constants.dayPeriod;
@@ -337,15 +412,39 @@ class SaleService {
                             assigned = true;
                         }
                     }
-                    console.log(response);
                     if (!assigned) {
                         response['night'] =
                             response['night'] + parseFloat(elm.total_sales);
                     }
                 });
-                const max_totals = Math.max(...Object.values(response));
-                const max_period = getKeyByValue(response, max_totals);
-                resolve({ period: max_period, total: max_totals });
+                console.log(response);
+                resolve(response);
+            } catch (error) {
+                console.error('SaleService.getBestOsSales', error);
+                reject(error);
+            }
+        });
+    }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @param {Number} count
+     * @param {Number} offset
+     * @returns {Promise{total:Number,os:String}}
+     */
+    getTotalSalesPerDevice(startDate, endDate, count, offset, sort) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await this.saleRepository.getBestSalesDevice(
+                    startDate,
+                    endDate,
+                    count,
+                    offset,
+                    sort,
+                    ['total']
+                );
+                resolve(result);
             } catch (error) {
                 console.error('SaleService.getBestOsSales', error);
                 reject(error);
