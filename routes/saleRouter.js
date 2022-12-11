@@ -10,10 +10,8 @@ const router = require('express').Router();
  * paths:
  *  /performances:
  *   get:
- *     produces:
-        - application/json
- *   responses:
- *    200:
+ *    responses:
+ *     200:
  *      decription:ok
  *
  */
