@@ -334,7 +334,7 @@ class HomePageController {
      * @param {Number} count
      * @param {Number} offset
      * @param {false | "DESC" | "ASC"} sort
-     * @returns {Promise{total:Number,fr_name:String,en_name:String}}
+     * @returns {Promise<Array<{total:Number,fr_name:String,en_name:String}>>}
      */
     async getTotalSalesPerDevice(startDate, endDate, count, offset, sort) {
         return new Promise(async (resolve, reject) => {

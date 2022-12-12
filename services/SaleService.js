@@ -1,5 +1,6 @@
 const CC = require('currency-converter-lt');
 const { getCountryDetails, getKeyByValue } = require('../helpers/helpers');
+const { HttpCodes } = require('../utils/HttpCode');
 const constants = new (require('../helpers/Constants'))();
 
 class SaleService {
@@ -143,6 +144,7 @@ class SaleService {
                     'DESC',
                     ['total_sales']
                 );
+                if (!result.length) throw HttpCodes[404];
                 resolve({ ...result[0], total_sales: +result[0]?.total_sales });
             } catch (error) {
                 console.error('SaleService.getBestSalesDevice', error);
@@ -167,7 +169,11 @@ class SaleService {
                     'DESC',
                     ['color_total_sales']
                 );
-                resolve(result[0] || result);
+                if (!result.length) throw HttpCodes[404];
+                resolve({
+                    ...result[0],
+                    color_total_sales: +result[0]?.color_total_sales,
+                });
             } catch (error) {
                 console.error('SaleService.getBestSalesColor', error);
                 reject(error);
@@ -191,7 +197,11 @@ class SaleService {
                     'DESC',
                     ['best_sale_category']
                 );
-                resolve(result[0] || result);
+                if (!result.length) throw HttpCodes[404];
+                resolve({
+                    ...result[0],
+                    best_sale_category: +result[0]?.best_sale_category,
+                });
             } catch (error) {
                 console.error('SaleService.getBestSalesCategory', error);
                 reject(error);
@@ -213,8 +223,12 @@ class SaleService {
                     'DESC',
                     ['total_sale']
                 );
+                if (!result.length) throw HttpCodes[404];
                 result[0].day = getKeyByValue(constants.days, result[0].day);
-                resolve(result[0]);
+                resolve({
+                    ...result[0],
+                    total_sale: +result[0]?.total_sale,
+                });
             } catch (error) {
                 console.error('SaleService.getBestSellsDay', error);
                 reject(error);
@@ -244,7 +258,7 @@ class SaleService {
                 );
                 const details = getCountryDetails(result[0].countrycode);
 
-                resolve({ ...result[0], ...details });
+                resolve({ ...result[0], total: +result[0].total, ...details });
             } catch (error) {
                 console.error('SaleService.getBestSalesColor', error);
                 reject(error);
@@ -269,7 +283,10 @@ class SaleService {
                         'DESC',
                         ['total']
                     );
-                resolve(result[0]);
+                resolve({
+                    ...result[0],
+                    total: +result[0]?.total,
+                });
             } catch (error) {
                 console.error('SaleService.getBestSalesColor', error);
                 reject(error);
@@ -293,7 +310,10 @@ class SaleService {
                     'DESC',
                     ['total']
                 );
-                resolve(result[0]);
+                resolve({
+                    ...result[0],
+                    total: +result[0]?.total,
+                });
             } catch (error) {
                 console.error('SaleService.getBestOsSales', error);
                 reject(error);
@@ -370,7 +390,11 @@ class SaleService {
                         sort,
                         ['total']
                     );
-                resolve(result);
+                resolve(
+                    result.map((elm) => {
+                        return { ...elm, tota: +elm.total };
+                    })
+                );
             } catch (error) {
                 console.error('SaleService.getBestOsSales', error);
                 reject(error);
@@ -431,7 +455,7 @@ class SaleService {
      * @param {Number} endDate
      * @param {Number} count
      * @param {Number} offset
-     * @returns {Promise{total:Number,os:String}}
+     * @returns {Promise<Array<{total:Number,os:String}>>}
      */
     getTotalSalesPerDevice(startDate, endDate, count, offset, sort) {
         return new Promise(async (resolve, reject) => {

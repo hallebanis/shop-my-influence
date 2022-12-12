@@ -48,6 +48,9 @@ app.use(
 );
 //swagger config
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs));
+app.get('/', (req, res) => {
+    res.send('Shop my influence');
+});
 
 /**
  * @swagger

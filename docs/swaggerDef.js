@@ -97,7 +97,7 @@
  *                                          type: string
  * /sale/periodSales:
  *      get:
- *          summary: provides all data for the global performance section? the api do no have an error response
+ *          summary: sales grouped by day's periods=> morning, afternoon , evening and night
  *          parameters:
  *              - in: query
  *                name: start
@@ -236,5 +236,53 @@
  *                                          fr_name:
  *                                              type: string
  *                                          en_name:
+ *                                              type: string
+ *                                  bestSalesColor:
+ *                                      description: total sales of the company
+ *                                      type: object
+ *                                      properties:
+ *                                          color_total_sales:
+ *                                              type: number
+ *                                          fr_name:
+ *                                              type: string
+ *                                          en_name:
+ *                                              type: string
+ *                                  bestSalesDay:
+ *                                      description: total sales of the company
+ *                                      type: object
+ *                                      properties:
+ *                                          total_sale:
+ *                                              type: number
+ *                                          day:
+ *                                              type: string
+ *                                  bestSalesPeriodOfDay:
+ *                                      description: best period of day's sales
+ *                                      type: object
+ *                                      properties:
+ *                                          total:
+ *                                              type: number
+ *                                          period:
+ *                                              type: string
+ *                                  bestSalesInfluencer:
+ *                                      description: best influencer sales
+ *                                      type: object
+ *                                      properties:
+ *                                          total:
+ *                                              type: number
+ *                                          img:
+ *                                              type: string
+ *                                          name:
+ *                                              type: string
+ *                                  bestSalesCountry:
+ *                                      description: best country sales
+ *                                      type: object
+ *                                      properties:
+ *                                          total:
+ *                                              type: number
+ *                                          countrycode:
+ *                                              type: string
+ *                                          name:
+ *                                              type: string
+ *                                          flag:
  *                                              type: string
  */
