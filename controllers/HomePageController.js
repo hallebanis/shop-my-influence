@@ -11,6 +11,12 @@ class HomePageController {
     constructor(input) {
         this.saleService = input?.saleService;
     }
+    /**
+     *
+     * @param {Number} startDate
+     * @param {Number} endDate
+     * @returns {{totalSales:Number,sales_count:Number,average_cart:Number,sibled_country_count:Number,product_sales_count:Number}}
+     */
     async getGlobalPerformance(startDate, endDate) {
         return new Promise((resolve, reject) => {
             const response = {
