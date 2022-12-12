@@ -26,7 +26,7 @@ class Constants {
                     },
                 ],
             },
-            apis: ['./routes/*.js', 'index.js'],
+            apis: ['./routes/*.js', 'index.js', './docs/*.js'],
         });
         this.days = Object.freeze({
             sunday: 0,

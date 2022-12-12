@@ -59,7 +59,7 @@ class SaleService {
                     startDate,
                     endDate
                 );
-                resolve(response);
+                resolve({ sales_count: +response.sales_count });
             } catch (error) {
                 console.error('SaleService.getTotalSales', error);
                 reject(error);
@@ -79,7 +79,7 @@ class SaleService {
                     startDate,
                     endDate
                 );
-                resolve(result);
+                resolve({ average_cart: +result.average_cart });
             } catch (error) {
                 console.error('SaleService.getTotalSales', error);
                 reject(error);
@@ -99,7 +99,7 @@ class SaleService {
                     startDate,
                     endDate
                 );
-                resolve(result);
+                resolve({ sibled_country_count: +result.sibled_country_count });
             } catch (error) {
                 console.error('SaleService.getTotalSales', error);
                 reject(error);
@@ -119,7 +119,7 @@ class SaleService {
                     startDate,
                     endDate
                 );
-                resolve(result);
+                resolve({ product_sales_count: +result.product_sales_count });
             } catch (error) {
                 console.error('SaleService.getTotalSales', error);
                 reject(error);
@@ -143,7 +143,7 @@ class SaleService {
                     'DESC',
                     ['total_sales']
                 );
-                resolve(result[0] || result);
+                resolve({ ...result[0], total_sales: +result[0]?.total_sales });
             } catch (error) {
                 console.error('SaleService.getBestSalesDevice', error);
                 reject(error);

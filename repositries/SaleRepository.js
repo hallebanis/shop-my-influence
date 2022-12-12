@@ -117,7 +117,7 @@ class SaleRepository {
      * @param {Number} offset
      * @param {false | "ASC" | "DESC"} order
      * @param {Array<String>} orderColumns
-     * @returns {{total_sales:Number,devisetype:String}}
+     * @returns {Array<{total_sales:Number,devisetype:String}>}
      */
     async getBestSalesDevice(
         startDate,
