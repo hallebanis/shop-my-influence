@@ -5,7 +5,8 @@ this is a technical test for shop my influence
 projet: shop my influence test technique
 github: https://github.com/hallebanis/shop-my-influence
 online url: https://shop-my-influence.onrender.com/
-api documentation : https://shop-my-influence.onrender.com/api-docs/
+NB: le web service est deployé sur render et l'instance sera désactivée si elleest inactive pour une longue periode , mais lorsqu'elle reçoit une requete elle sera ressucité, donc la premiere requete prendera certain temps avant d'etre executé
+api documentation : https://shop-my-influence.onrender.com/api-docs/S
 
 to run the project locally install nodemon then run : npm start or just run node index.js
 
