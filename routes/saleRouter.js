@@ -1,20 +1,4 @@
 const router = require('express').Router();
-/**
- * @swagger
- * info:
- *  title: shop my influence apis
- *  description: technical test
- *  version: 1.0.0
- * host: https://shop-my-influence.onrender.com/
- * basePath: /sale
- * paths:
- *  /performances:
- *   get:
- *    responses:
- *     200:
- *      decription:ok
- *
- */
 
 /**
  *
@@ -22,10 +6,52 @@ const router = require('express').Router();
  * @returns {import('express').Router}
  */
 function saleRouter(homePageController) {
-    // return async function (req, res) {
-    //     const t = await conversionController.getAll();
-    //     res.send(t);
-    // };
+    /**
+     * @swagger
+     * /sale/performances:
+     *      get:
+     *          summary: provides all data for the global performance section? the api do no have an error response
+     *          parameters:
+     *              - in: query
+     *                name: start
+     *                schema:
+     *                  type: intger
+     *                required: false
+     *                description: timestamp for the start of a period search
+     *              - in: query
+     *                name: end
+     *                schema:
+     *                  type: intger
+     *                required: false
+     *                description: timestamp for the end of a period search
+     *          responses:
+     *              200:
+     *                  description: return a JSON data for the global performance section
+     *                  content:
+     *                      application/json:
+     *                          schema:
+     *                              type: object
+     *                              example:
+     *                                  {"totalSales": 2203615.6399999997,"sales_count": "69553","average_cart": "31.7578123463111486","sibled_country_count": "77","product_sales_count": "7520"}
+     *                              properties:
+     *                                  totalSales:
+     *                                      description: total sales of the company
+     *                                      type: intger
+     *                                  sales_count:
+     *                                      description: total sales of the company
+     *                                      type: intger
+     *                                  avergae_cart:
+     *                                      description: avergae cart
+     *                                      type: intger
+     *                                  sibled_country_count:
+     *                                      description: total count of the coutries where we selle our products
+     *                                      type: intger
+     *                                  product_sales_count:
+     *                                      description: number of products selled
+     *                                      type: intger
+     *
+     *
+     */
     router.get('/performances', async (req, res) => {
         try {
             const startDate = req.query?.start || 0;
@@ -34,7 +60,7 @@ function saleRouter(homePageController) {
                 startDate,
                 endDate
             );
-            res.send(result);
+            res.status(200).send(result);
         } catch (error) {
             res.status(error.code).send(error);
         }

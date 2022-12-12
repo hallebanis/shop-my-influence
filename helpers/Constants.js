@@ -18,7 +18,11 @@ class Constants {
                 servers: [
                     {
                         url: 'http://localhost:4000',
-                        description: 'My API Documentation',
+                        description: 'local My API Documentation',
+                    },
+                    {
+                        url: 'https://shop-my-influence.onrender.com/',
+                        description: 'online My API Documentation',
                     },
                 ],
             },

@@ -75,7 +75,7 @@ class SaleService {
     averageCart(startDate, endDate) {
         return new Promise(async (resolve, reject) => {
             try {
-                const result = await this.saleRepository.result(
+                const result = await this.saleRepository.averageCart(
                     startDate,
                     endDate
                 );
